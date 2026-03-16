@@ -5,8 +5,9 @@ sudo apt update
 sudo apt install suricata -y
 
 
+cd  /var/lib/suricata/rules
+nano suricata.rules
 
-sudo nano /etc/suricata/rules/sql.rules
 
 
 alert http any any -> any any (msg:"SQL Injection Attempt"; content:"OR 1=1"; nocase; sid:1000001;)
