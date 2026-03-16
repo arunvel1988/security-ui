@@ -16,10 +16,10 @@ alert http any any -> any any (msg:"SQL Injection Attempt"; content:"OR 1=1"; no
 
 
 
-sudo nano /etc/suricata/suricata.yaml
+sudo nano /etc/suricata/suricata.yaml (line 1174)
 
-
-- sql.rules
+ rules:
+  - sql.rules
 
 #####################################################################
 
