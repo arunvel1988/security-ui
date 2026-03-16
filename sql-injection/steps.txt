@@ -1,0 +1,85 @@
+mkdir ecommerce_lab
+cd ecommerce_lab
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install flask
+#######################################################################################
+
+nano app.py
+
+
+from flask import Flask, request
+import sqlite3
+
+app = Flask(__name__)
+
+def get_db():
+    conn = sqlite3.connect("shop.db")
+    return conn
+
+@app.route("/")
+def home():
+    return "Welcome to Demo E-commerce Site"
+
+@app.route("/login")
+def login():
+    user = request.args.get("user")
+    pwd = request.args.get("pwd")
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    query = f"SELECT * FROM users WHERE username='{user}' AND password='{pwd}'"
+    print("Executing Query:", query)
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    if result:
+        return f"Welcome {user}"
+    else:
+        return "Invalid credentials"
+
+app.run(host="0.0.0.0", port=5000)
+
+###############################################################################
+
+
+nano init_db.py
+
+import sqlite3
+
+conn = sqlite3.connect("shop.db")
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE users (
+id INTEGER PRIMARY KEY,
+username TEXT,
+password TEXT
+)
+""")
+
+cursor.execute("INSERT INTO users VALUES (1,'admin','admin123')")
+cursor.execute("INSERT INTO users VALUES (2,'alice','alice123')")
+
+conn.commit()
+conn.close()
+#########################################################################
+
+python init_db.py
+
+python app.py
+
+http://YOUR-IP:5000/login?user=admin&pwd=admin123
+
+http://YOUR-IP:5000/login?user=admin'--&pwd=abc
+
+
+http://YOUR-IP:5000/login?user=' OR 1=1--&pwd=x
+
+#######################################################################
+
